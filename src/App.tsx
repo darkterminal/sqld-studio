@@ -30,12 +30,12 @@ function App() {
 
       setClientUrl(url);
       setAuthToken(token);
-      setPageTitle(pageTitle);
 
       // Clear URL parameters from the address bar by updating the history
       window.history.replaceState({}, "", window.location.pathname);
     }
 
+    setPageTitle(pageTitle);
     document.title = pageTitle
 
     // Clear localStorage when the tab or window is closed
