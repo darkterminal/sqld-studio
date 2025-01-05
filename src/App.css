@@ -1,0 +1,41 @@
+.full-screen-borderless {
+  border: 0;
+  height: 100vh; /* Full height of the viewport */
+  width: 100vw;  /* Full width of the viewport */
+}
+
+.form-container {
+  width: 70vw;
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  form {
+    width: 50vw;
+
+    h2 {
+      text-align: center;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      margin: 10px 0;
+
+      span {
+        font-weight: bolder;
+      }
+
+      input {
+        padding: 10px 15px;
+      }
+    }
+
+    button {
+      width: 100% !important;
+      background-color: rgb(40, 168, 206);
+    }
+  }
+}
