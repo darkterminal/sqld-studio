@@ -6,54 +6,38 @@ import "./App.css";
 function App() {
   const [clientUrl, setClientUrl] = useState<string | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
-  const [pageTitle, setPageTitle] = useState<string>("SQLD Studio");
+  const [pageTitle, setPageTitle] = useState<string | null>(null);
+  const [databaseName, setDatabaseName] = useState<string | null>(null);
 
   // Function to get URL parameters
   const getUrlParams = () => {
     const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get("name");
     return {
       url: urlParams.get("url") || "",
-      token: urlParams.get("authToken") || "", // Rename authToken to token
-      title: urlParams.get('name') + " - SQLD Studio" || "SQLD Studio"
+      token: urlParams.get("authToken") || "",
+      title: name ? `${name} - SQLD Studio` : "SQLD Studio",
+      database: name
     };
   };
 
   // Get URL parameters
-  const { url, token, title } = getUrlParams();
+  const { url, token, title, database } = getUrlParams();
 
   // Save to localStorage and update state
   useEffect(() => {
     if (url && token) {
-      localStorage.setItem("clientUrl", url);
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("title", pageTitle);
-
       setClientUrl(url);
       setAuthToken(token);
+      setPageTitle(title);
+      setDatabaseName(database);
+
+      document.title = title;
 
       // Clear URL parameters from the address bar by updating the history
       window.history.replaceState({}, "", window.location.pathname);
     }
-
-    setPageTitle(pageTitle);
-    document.title = pageTitle
-
-    // Clear localStorage when the tab or window is closed
-    const handleBeforeUnload = () => {
-      localStorage.removeItem("clientUrl");
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("title");
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [url, token, pageTitle]);
-
-  document.title = title;
+  }, [url, token, title, database]);
 
   // Prepare hooks before conditional rendering
   const client = useMemo(() => {
@@ -171,11 +155,47 @@ function App() {
   }
 
   return (
-    <iframe
-      className="full-screen-borderless"
-      ref={iframeRef}
-      src="https://libsqlstudio.com/embed/sqlite"
-    />
+    <div className="full-screen-borderless">
+      <nav className="navigation">
+        <div className="brand">
+          <span className="brand-name">SQLD Studio</span>
+          <span className="powered-by">
+            Powered by{" "}
+            <a
+              href="https://libsqlstudio.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LibSQL Studio
+            </a>
+          </span>
+        </div>
+        <div className="database">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="lucide lucide-database"
+          >
+            <ellipse cx="12" cy="5" rx="9" ry="3" />
+            <path d="M3 5V19A9 3 0 0 0 21 19V5" />
+            <path d="M3 12A9 3 0 0 0 21 12" />
+          </svg>
+          <span>{databaseName}</span>
+        </div>
+      </nav>
+      <iframe
+        className="iframe-screen-borderless"
+        ref={iframeRef}
+        src={`https://libsqlstudio.com/embed/sqlite?name=${pageTitle}`}
+      />
+    </div>
   );
 }
 

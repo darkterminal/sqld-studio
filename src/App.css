@@ -2,6 +2,39 @@
   border: 0;
   height: 100vh; /* Full height of the viewport */
   width: 100vw;  /* Full width of the viewport */
+  
+  .iframe-screen-borderless {
+    border: 0;
+    height: 95vh;
+    width: 100vw;
+  }
+
+  .navigation {
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    color: #ffffff;
+    background-color: #0a0a0a;
+    border-bottom: 0.5px solid rgba(67, 67, 67, 0.76);
+
+    .brand {
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      .powered-by {
+        font-size: 12px;
+      }
+    }
+
+    .database {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+
 }
 
 .form-container {
